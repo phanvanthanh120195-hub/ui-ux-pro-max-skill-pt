@@ -1,19 +1,20 @@
-import { join } from 'node:path';
-import { tmpdir } from 'node:os';
-import { mkdir } from 'node:fs/promises';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import chalk from 'chalk';
 import ora from 'ora';
 import prompts from 'prompts';
 import type { AIType } from '../types/index.js';
 import { AI_TYPES } from '../types/index.js';
-import { fetchReleases, getLatestRelease, downloadRelease, getAssetUrl } from '../utils/github.js';
-import { extractZip, copyFolders, cleanup } from '../utils/extract.js';
+import { copyFolders } from '../utils/extract.js';
 import { detectAIType, getAITypeDescription } from '../utils/detect.js';
 import { logger } from '../utils/logger.js';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+// From dist/index.js -> ../assets (one level up to cli/, then assets/)
+const ASSETS_DIR = join(__dirname, '..', 'assets');
+
 interface InitOptions {
   ai?: AIType;
-  version?: string;
   force?: boolean;
 }
 
@@ -51,51 +52,11 @@ export async function initCommand(options: InitOptions): Promise<void> {
 
   logger.info(`Installing for: ${chalk.cyan(getAITypeDescription(aiType))}`);
 
-  // Fetch release
-  const spinner = ora('Fetching release info...').start();
+  const spinner = ora('Installing files...').start();
 
   try {
-    let release;
-    if (options.version) {
-      const releases = await fetchReleases();
-      release = releases.find(r => r.tag_name === options.version);
-      if (!release) {
-        spinner.fail(`Version ${options.version} not found`);
-        process.exit(1);
-      }
-    } else {
-      release = await getLatestRelease();
-    }
-
-    spinner.text = `Found version: ${release.tag_name}`;
-
-    const assetUrl = getAssetUrl(release);
-    if (!assetUrl) {
-      spinner.fail('No downloadable asset found in release');
-      process.exit(1);
-    }
-
-    // Download
-    spinner.text = 'Downloading...';
-    const tempDir = join(tmpdir(), `uipro-${Date.now()}`);
-    await mkdir(tempDir, { recursive: true });
-
-    const zipPath = join(tempDir, 'release.zip');
-    await downloadRelease(assetUrl, zipPath);
-
-    // Extract
-    spinner.text = 'Extracting...';
-    const extractDir = join(tempDir, 'extracted');
-    await mkdir(extractDir, { recursive: true });
-    await extractZip(zipPath, extractDir);
-
-    // Copy folders
-    spinner.text = 'Installing files...';
     const cwd = process.cwd();
-    const copiedFolders = await copyFolders(extractDir, cwd, aiType);
-
-    // Cleanup
-    await cleanup(tempDir);
+    const copiedFolders = await copyFolders(ASSETS_DIR, cwd, aiType);
 
     spinner.succeed('Installation complete!');
 
@@ -107,7 +68,7 @@ export async function initCommand(options: InitOptions): Promise<void> {
     });
 
     console.log();
-    logger.success(`UI/UX Pro Max ${release.tag_name} installed successfully!`);
+    logger.success('UI/UX Pro Max installed successfully!');
 
     // Next steps
     console.log();

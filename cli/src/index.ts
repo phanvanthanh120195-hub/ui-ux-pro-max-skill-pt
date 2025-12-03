@@ -12,13 +12,12 @@ const program = new Command();
 program
   .name('uipro')
   .description('CLI to install UI/UX Pro Max skill for AI coding assistants')
-  .version('1.0.3');
+  .version('1.1.0');
 
 program
   .command('init')
   .description('Install UI/UX Pro Max skill to current project')
   .option('-a, --ai <type>', `AI assistant type (${AI_TYPES.join(', ')})`)
-  .option('-v, --version <tag>', 'Specific version to install')
   .option('-f, --force', 'Overwrite existing files')
   .action(async (options) => {
     if (options.ai && !AI_TYPES.includes(options.ai)) {
@@ -28,7 +27,6 @@ program
     }
     await initCommand({
       ai: options.ai as AIType | undefined,
-      version: options.version,
       force: options.force,
     });
   });
