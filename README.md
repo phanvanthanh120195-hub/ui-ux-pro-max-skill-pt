@@ -278,6 +278,7 @@ uipro init --ai trae        # Trae
 uipro init --ai opencode    # OpenCode
 uipro init --ai continue    # Continue
 uipro init --ai codebuddy   # CodeBuddy
+uipro init --ai droid       # Droid (Factory)
 uipro init --ai all         # All assistants
 ```
 
@@ -311,7 +312,7 @@ winget install Python.Python.3.12
 
 ### Skill Mode (Auto-activate)
 
-**Supported:** Claude Code, Cursor, Windsurf, Antigravity, Codex CLI, Continue, Gemini CLI, OpenCode, Qoder, CodeBuddy
+**Supported:** Claude Code, Cursor, Windsurf, Antigravity, Codex CLI, Continue, Gemini CLI, OpenCode, Qoder, CodeBuddy, Droid (Factory)
 
 The skill activates automatically when you request UI/UX work. Just chat naturally:
 
@@ -373,7 +374,7 @@ Just mention your preferred stack in the prompt, or let it default to HTML + Tai
 
 For direct access to the design system generator:
 
-> Note: If you installed via Continue, replace `.claude/skills/` with `.continue/skills/` in the commands below.
+> Note: If you installed via Continue, replace `.claude/skills/` with `.continue/skills/` in the commands below. For Droid (Factory), use `.factory/skills/`.
 
 ```bash
 # Generate design system with ASCII output
@@ -431,7 +432,7 @@ Now, generate the code...
 
 ### For Users
 
-The codebase has been restructured to use a **template-based generation system**. All platform-specific files (`.cursor/`, `.windsurf/`, `.kiro/`, etc.) are now generated dynamically by the CLI.
+The codebase has been restructured to use a **template-based generation system**. All platform-specific files (`.cursor/`, `.windsurf/`, `.kiro/`, `.factory/`, etc.) are now generated dynamically by the CLI.
 
 **Always use the CLI to install:**
 
@@ -455,6 +456,7 @@ cd ui-ux-pro-max-skill
 src/ui-ux-pro-max/           # Source of truth (data, scripts, templates)
 cli/                         # CLI installer (generates files from templates)
 .claude/                     # Local dev/test for Claude Code skill
+.factory/                    # Local dev/test for Droid (Factory) skill
 
 # 3. Make changes in src/ui-ux-pro-max/
 # - data/*.csv              → Database files
