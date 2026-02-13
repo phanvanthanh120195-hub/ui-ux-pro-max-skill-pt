@@ -26,6 +26,7 @@ interface InitOptions {
   force?: boolean;
   offline?: boolean;
   legacy?: boolean; // Use old ZIP-based install
+  directory?: string; // Target directory
 }
 
 /**
@@ -145,7 +146,19 @@ export async function initCommand(options: InitOptions): Promise<void> {
   logger.info(`Installing for: ${chalk.cyan(getAITypeDescription(aiType))}`);
 
   const spinner = ora('Installing files...').start();
-  const cwd = process.cwd();
+  // Resolve target directory
+  const cwd = options.directory
+    ? join(process.cwd(), options.directory)
+    : process.cwd();
+
+  // Ensure directory exists
+  try {
+    const { mkdir } = await import('node:fs/promises');
+    await mkdir(cwd, { recursive: true });
+  } catch (err) {
+    // Ignore error if directory already exists
+  }
+
   let copiedFolders: string[] = [];
   let installMethod = 'template';
 

@@ -22,18 +22,19 @@ program
   .version(pkg.version);
 
 program
-  .command('init')
-  .description('Install UI/UX Pro Max skill to current project')
+  .command('init [directory]')
+  .description('Install UI/UX Pro Max skill to current project or specified directory')
   .option('-a, --ai <type>', `AI assistant type (${AI_TYPES.join(', ')})`)
   .option('-f, --force', 'Overwrite existing files')
   .option('-o, --offline', 'Skip GitHub download, use bundled assets only')
-  .action(async (options) => {
+  .action(async (directory, options) => {
     if (options.ai && !AI_TYPES.includes(options.ai)) {
       console.error(`Invalid AI type: ${options.ai}`);
       console.error(`Valid types: ${AI_TYPES.join(', ')}`);
       process.exit(1);
     }
     await initCommand({
+      directory,
       ai: options.ai as AIType | undefined,
       force: options.force,
       offline: options.offline,
