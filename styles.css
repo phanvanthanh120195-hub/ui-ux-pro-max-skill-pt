@@ -1,0 +1,59 @@
+/* Medical Style Customizations */
+
+/* Smooth Scrolling & Fixed Header Support */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    /* Offset for fixed navbar */
+}
+
+/* Custom Scrollbar - Cleaner, Thinner */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F0FDFA;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}
+
+/* Focus Accessibility - High Contrast Ring */
+:focus-visible {
+    outline: 2px solid #0891B2;
+    outline-offset: 2px;
+}
+
+/* Form Elements Focus Transition */
+input,
+select,
+textarea {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Card Hover Lift Effect */
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(8, 145, 178, 0.1), 0 8px 10px -6px rgba(8, 145, 178, 0.1);
+}
+
+/* Mobile Menu Animation */
+#mobile-menu {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: top;
+}
+
+.hidden {
+    display: none;
+}
